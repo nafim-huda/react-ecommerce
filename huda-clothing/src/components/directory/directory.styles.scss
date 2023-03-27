@@ -1,0 +1,12 @@
+/* SASS vs. CSS
+    - lets us nest styles for components in a much more readable form compared
+    to nesting components in CSS
+*/
+.directory-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+ 
