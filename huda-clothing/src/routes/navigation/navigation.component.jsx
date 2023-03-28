@@ -22,9 +22,12 @@ const Navigation = () => {
                 <Link className="logo-container" to='/'> 
                     <HudaLogo className='logo' />
                 </Link>
-                <div children='nav-links-container'>
+                <div className='nav-links-container'>
                     <Link className="nav-link" to='/shop'>
                         SHOP 
+                    </Link>
+                    <Link className="nav-link" to='/sign-in'>
+                        SIGN IN 
                     </Link>
                 </div>
             </div>
