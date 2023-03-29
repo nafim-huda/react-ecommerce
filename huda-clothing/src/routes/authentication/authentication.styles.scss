@@ -1,0 +1,6 @@
+.authentication-container {
+    display: flex;
+    width: 900px; // each form inside is 380px
+    justify-content: space-between;
+    margin: 30px auto; // auto side margins will ensure forms are in the center
+}
