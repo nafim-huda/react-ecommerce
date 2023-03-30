@@ -10,6 +10,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
+    onAuthStateChanged // returns a listener
 } from 'firebase/auth';
 import {
     getFirestore,
@@ -103,3 +104,18 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 }
 
 export const signOutUser = async () => await signOut(auth);
+
+/* Note that Firebase will persist our user's authentication between 
+refreshes because it keeps track of authentication while the connection is alive
+*/
+
+export const onAuthStateChangedListener = async (callback) => 
+    onAuthStateChanged(auth, callback); // errorCallback, completedCallback
+
+/* Behind the scenes of our onAuthStateChanged(), we are creating a listener obj
+    {
+        next: callback
+        error: errorCallback,
+        complete: completedCallback
+    }
+*/
