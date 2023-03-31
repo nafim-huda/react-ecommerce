@@ -10,13 +10,17 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
-    onAuthStateChanged // returns a listener
+    onAuthStateChanged, // returns a listener
 } from 'firebase/auth';
 import {
     getFirestore,
     doc, // retrieves document instance
     getDoc, // gets a document's data
     setDoc, // sets a document's data
+    collection, // retrieves a collection reference
+    writeBatch, // instantiates a batch instance
+    query,
+    getDocs 
 } from 'firebase/firestore'
 
 // Your web app's Firebase configuration
@@ -34,6 +38,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
+
 
 
 const googleProvider = new GoogleAuthProvider();
@@ -55,10 +60,47 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googlePro
 // Initialize FireStore DB that points to our DB inside of our Firebase Console
 export const db = getFirestore();
 
+export const addCollectionAndDocuments = async (
+    collectionKey,
+    objectsToAdd,
+    field
+) => {
+    // first retrieve collection reference from db
+    const collectionRef = collection(db, collectionKey)
+    // create a transaction for adding all of the objects we are trying to add to the collection
+    // first we need a batch instance
+    const batch = writeBatch(db)
+    objectsToAdd.forEach((object) => {
+        // retrieve document reference for data
+        const docRef = doc(collectionRef, object[field].toLowerCase())
+        // add this batch to our set of batch commits
+        batch.set(docRef, object)
+    })
+    // initiate transaction
+    await batch.commit();
+    console.log('Done')
+}
+
+export const getCategoriesAndDocuments = async () => {
+    const collectionRef = collection(db, 'categories');
+    // instantiates an object for fetching document snapshots
+    const q = query(collectionRef);
+    
+    const querySnapshot = await getDocs(q);
+    // retrieves the data and reduce over all of the documents 
+    const categoryMap = querySnapshot.docs().reduce((acc, docSnapshot) => {
+        // destructure values off of the document
+        const { title, items } = docSnapshot.data();
+        acc[title.toLowerCase()] = items;
+        return acc;
+    }, {})
+    // return the items stored in each documents in the 'category' collection
+    return categoryMap
+}
+
 export const createUserDocumentFromAuth = async (
-    userAuth, 
-    additionalInformation) => 
-    {
+    userAuth,
+    additionalInformation) => {
     // check if there is an existing document reference
     /* Note that Google will generate a userAuth object even though a document does NOT exist
     inside of Firestore -> below doc() will create a new firestore 
@@ -66,11 +108,11 @@ export const createUserDocumentFromAuth = async (
     const userDocRef = doc(db, 'users', userAuth.uid);
     console.log(userDocRef);
 
-    const userSnapshot = await getDoc(userDocRef); 
+    const userSnapshot = await getDoc(userDocRef);
     console.log(userSnapshot)
     // .exists() tells us whether our FireStore DB actually contains the document reference and data
     // associated with the reference 
-    if(!userSnapshot.exists()) {
+    if (!userSnapshot.exists()) {
         // create new instance of user document+data
         const { displayName, email } = userAuth;
         const createdAt = new Date();
@@ -91,14 +133,14 @@ export const createUserDocumentFromAuth = async (
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
     // protects our code 
-    if(!email || !password) return;
+    if (!email || !password) return;
 
     return await createUserWithEmailAndPassword(auth, email, password);
 }
 
 export const signInAuthUserWithEmailAndPassword = async (email, password) => {
     // protects our code 
-    if(!email || !password) return;
+    if (!email || !password) return;
 
     return await signInWithEmailAndPassword(auth, email, password);
 }
@@ -109,7 +151,7 @@ export const signOutUser = async () => await signOut(auth);
 refreshes because it keeps track of authentication while the connection is alive
 */
 
-export const onAuthStateChangedListener = async (callback) => 
+export const onAuthStateChangedListener = async (callback) =>
     onAuthStateChanged(auth, callback); // errorCallback, completedCallback
 
 /* Behind the scenes of our onAuthStateChanged(), we are creating a listener obj
