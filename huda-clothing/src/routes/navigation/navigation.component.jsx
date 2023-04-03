@@ -10,7 +10,12 @@ import { CartContext } from "../../contexts/cart.context";
 
 import { signOutUser } from "../../utils/firebase/firebase.utils";
 
-import './navigation.styles.scss'
+import {
+    NavigationContainer,
+    LogoContainer,
+    NavLinks,
+    NavLink,
+} from './navigation.styles.jsx'
 
 /* Fragment component does not actually render any HTML 
     - useful if you don't want a wrapping parent level component(i.e. top level div) 
@@ -23,7 +28,7 @@ import './navigation.styles.scss'
     */
 
 const Navigation = () => {
-    /* useContext says re-render the functional component whenever a valaue
+    /* useContext says re-render the functional component whenever a value
     (currentUser) updates go ahead and re-render Navigation component
     - another way to think about it -> Navigation component is listening for
     any updates to the currentUser 
@@ -37,27 +42,30 @@ const Navigation = () => {
 
     return (
         <Fragment>
-            <div className="navigation">
-                <Link className="logo-container" to='/'>
+            <NavigationContainer>
+                <LogoContainer to='/'>
                     <HudaLogo className='logo' />
-                </Link>
-                <div className='nav-links-container'>
-                    <Link className="nav-link" to='/shop'>
+                </LogoContainer>
+                <NavLinks>
+                    <NavLink to='/shop'>
                         SHOP
-                    </Link>
+                    </NavLink>
+
                     {currentUser ? (
-                        <span className="nav-link" onClick={signOutUser}> SIGN OUT</span>
+                        <NavLink as='span' onClick={signOutUser}>
+                             SIGN OUT
+                        </NavLink>
                     ) : (
-                        <Link className="nav-link" to='/auth'>
+                        <NavLink to='/auth'>
                             SIGN IN
-                        </Link>
+                        </NavLink>
                     )}
                     <CartIcon />
-                </div>
+                </NavLinks>
                 { // if both isCartOpen and CartDropdown evaluate to true -> render CartDropdown
                     isCartOpen && <CartDropdown /> 
                 }
-             </div>
+             </NavigationContainer>
             <Outlet />
         </Fragment>
     )

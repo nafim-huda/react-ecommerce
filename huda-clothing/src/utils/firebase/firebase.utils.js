@@ -88,7 +88,7 @@ export const getCategoriesAndDocuments = async () => {
     
     const querySnapshot = await getDocs(q);
     // retrieves the data and reduce over all of the documents 
-    const categoryMap = querySnapshot.docs().reduce((acc, docSnapshot) => {
+    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
         // destructure values off of the document
         const { title, items } = docSnapshot.data();
         acc[title.toLowerCase()] = items;

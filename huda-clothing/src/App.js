@@ -13,10 +13,15 @@ const App = () => {
     The <Route> component will look for a URL to match that matches value specified
     in path attribute -> the route component listed in the element attribute will be rendered
     once a URL matches the path attribute value */
+
+    /* 
+    The * character will match any wildcards after /shop -> render any child routes inside
+    of the /shop parent route
+    */
     <Routes>
       <Route path='/' element={<Navigation />}>
         <Route index element={<Home />} />
-        <Route path='shop' element={<Shop />} />
+        <Route path='shop*' element={<Shop />} />
         <Route path='auth' element={<Authentication />} />
         <Route path='checkout' element={<Checkout />} />
       </Route>

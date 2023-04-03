@@ -2,12 +2,12 @@ import { createContext, useState, useEffect } from "react";
 
 import { getCategoriesAndDocuments } from "../utils/firebase/firebase.utils.js";
 
-export const ProductsContext = createContext({
-    products: []
+export const  CategoriesContext = createContext({
+    categoriesMap: {}, // Why obj rather than array? We are interfacing with an the keys
 })
 
-export const ProductsProvider = ({ children }) => {
-    const [products, setProducts] = useState([]);
+export const CategoriesProvider = ({ children }) => {
+    const [categoriesMap, setCategoriesMap] = useState({});
     useEffect(() => {
         /* In general, we want to wrap any async calls inside of an async function
          rather than defining the callback as async 
@@ -15,8 +15,10 @@ export const ProductsProvider = ({ children }) => {
         const getCategoriesMap = async () => {
             const categoryMap = await getCategoriesAndDocuments();
             console.log(categoryMap)
+            setCategoriesMap(categoryMap)
         }
+        getCategoriesMap();
     }, [])
-    const value = { products }
-    return <ProductsContext.Provider value={value}>{children}</ProductsContext.Provider>
+    const value = { categoriesMap }
+    return <CategoriesContext.Provider value={value}>{children}</CategoriesContext.Provider>
 }
