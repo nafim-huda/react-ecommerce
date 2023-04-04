@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect} from "react";
+import { createContext, useEffect, useReducer} from "react";
 
 import { createUserDocumentFromAuth, onAuthStateChangedListener } from "../utils/firebase/firebase.utils";
 
@@ -7,11 +7,44 @@ export const UserContext = createContext({
     currentUser: null,
     setCurrentUser: () => null,
 });
+
+export const USER_ACTION_TYPES = {
+    'SET_CURRENT_USER': 'SET_CURRENT_USER'
+}
+
+const userReducer = (state, action) => {
+    console.log('dispatched')
+    console.log(action)
+    const { type, payload } = action;
+    switch(type) {
+        case USER_ACTION_TYPES.SET_CURRENT_USER:
+            return {
+                ...state, // spread the previous state object values
+                currentUser: payload
+            }
+        default: // throw an error in case we receive a type that is not listed above
+            throw new Error(`Unhandled type ${type} in User Reducer`)
+    }
+}
+
+const INITIAL_STATE = {
+    currentUser: null
+}
+
 // component that will give access to values to components that are wrapped inside
 // children - represents components inside of our component tree that want access
 // to values stored in this context
 export const UserProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState(null);
+    const [{ currentUser }, dispatch] = useReducer(userReducer,INITIAL_STATE)
+    console.log(currentUser)
+
+    const setCurrentUser = (user) => {
+        // dispatch() will take a action type and a corresponding payload(if defined) to update
+        // any state values inside of our reducer
+        dispatch({ type: USER_ACTION_TYPES.SET_CURRENT_USER, payload: user})
+    }
+
+    //const [currentUser, setCurrentUser] = useState(null);
     const value = { currentUser, setCurrentUser };
 
     // moment our UserProvider mounts -> sign out our user to prevent Firebase user staying
@@ -35,3 +68,14 @@ export const UserProvider = ({ children }) => {
     }, [])
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
+
+/* 
+    - Reducers reflect the current value for our state(corresponding to a context state)
+    - Based off the state, action -> we determine what values to return off of our reducer
+
+    const userReducer = (state, action) => {
+        return {
+            currentUser: {...}
+        }
+    }
+*/
