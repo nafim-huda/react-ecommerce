@@ -7,7 +7,7 @@ import { selectCategoriesMap } from "../../store/categories/category.selector";
 import CategoryPreview from "../../components/category-preview/category-preview.component";
 
 const CategoriesPreview = () => {
-    const categoriesMap = useSelector(selectCategoriesMap())
+    const categoriesMap = useSelector(selectCategoriesMap)
 
     return (
         // We need to first display the four categories inside of our categoriesMap ->

@@ -10,7 +10,7 @@ import './category.styles.scss'
 
 const Category = () => {
     const { category } = useParams();
-    const categoriesMap = useSelector(selectCategoriesMap())
+    const categoriesMap = useSelector(selectCategoriesMap)
 
     /* We want to extract the products from categoriesMap based on the category passed from the url */
     const [products, setProducts] = useState(categoriesMap[category])
