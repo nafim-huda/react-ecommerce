@@ -21,6 +21,6 @@ const composedEnhancers = compose(applyMiddleware(...middleWares));
 // , the state after an action is dispatched
 export const store = createStore(
     rootReducer,
-    undefined, // initial state
+    {}, // initial state
     composedEnhancers 
 )

@@ -32,15 +32,7 @@ import {
 
 const Navigation = () => {
 
-    /* useContext says re-render the functional component whenever a value
-    (currentUser) updates go ahead and re-render Navigation component
-    - another way to think about it -> Navigation component is listening for
-    any updates to the currentUser 
-    ex.)
-    setCurrentUser is performed upon sign-in ->
-     currentUser value is updated in UserContext with useState() causing it to re-render-> 
-    Navigation will re-render since it was listening for changes to useContext on the UserContext component
-    */
+    // selector function - extracts off values from entire redux store
 
     const currentUser = useSelector(selectCurrentUser)
     const { isCartOpen } = useContext(CartContext)
