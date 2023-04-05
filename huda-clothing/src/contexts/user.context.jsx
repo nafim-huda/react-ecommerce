@@ -2,7 +2,10 @@ import { createContext, useEffect, useReducer} from "react";
 
 import { createAction } from "../utils/reducer/reducer.utils";
 
-import { createUserDocumentFromAuth, onAuthStateChangedListener } from "../utils/firebase/firebase.utils";
+import { 
+    createUserDocumentFromAuth,
+     onAuthStateChangedListener 
+} from "../utils/firebase/firebase.utils";
 
 // stores actual value(s) you want to access
 export const UserContext = createContext({
@@ -10,43 +13,41 @@ export const UserContext = createContext({
     setCurrentUser: () => null,
 });
 
-export const USER_ACTION_TYPES = {
-    'SET_CURRENT_USER': 'SET_CURRENT_USER'
-}
 
-const userReducer = (state, action) => {
-    console.log('dispatched')
-    console.log(action)
-    const { type, payload } = action;
-    switch(type) {
-        case USER_ACTION_TYPES.SET_CURRENT_USER:
-            return {
-                ...state, // spread the previous state object values
-                currentUser: payload
-            }
-        default: // throw an error in case we receive a type that is not listed above
-            throw new Error(`Unhandled type ${type} in User Reducer`)
-    }
-}
+// const userReducer = (state, action) => {
+//     console.log('dispatched')
+//     console.log(action)
+//     const { type, payload } = action;
+//     switch(type) {
+//         case USER_ACTION_TYPES.SET_CURRENT_USER:
+//             return {
+//                 ...state, // spread the previous state object values
+//                 currentUser: payload
+//             }
+//         default: // throw an error in case we receive a type that is not listed above
+//             throw new Error(`Unhandled type ${type} in User Reducer`)
+//     }
+// }
 
-const INITIAL_STATE = {
-    currentUser: null
-}
+// const INITIAL_STATE = {
+//     currentUser: null
+// }
 
 // component that will give access to values to components that are wrapped inside
 // children - represents components inside of our component tree that want access
 // to values stored in this context
 export const UserProvider = ({ children }) => {
-    const [{ currentUser }, dispatch] = useReducer(userReducer,INITIAL_STATE)
+    // const [{ currentUser }, dispatch] = useReducer(userReducer,INITIAL_STATE)
 
+    // action-creator function that dispatches a set user action type with the user we want to set as the payload
     const setCurrentUser = (user) => {
         // dispatch() will take a action type and a corresponding payload(if defined) to update
         // any state values inside of our reducer
-        dispatch(createAction(USER_ACTION_TYPES.SET_CURRENT_USER, user))
+        // dispatch(createAction(USER_ACTION_TYPES.SET_CURRENT_USER, user))
     }
 
     //const [currentUser, setCurrentUser] = useState(null);
-    const value = { currentUser, setCurrentUser };
+    // const value = { currentUser, setCurrentUser };
 
     // moment our UserProvider mounts -> sign out our user to prevent Firebase user staying
     // authenticated between refresh
@@ -67,6 +68,7 @@ export const UserProvider = ({ children }) => {
         })
          //return unsubscribe
     }, [])
+    const value = { }
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
 

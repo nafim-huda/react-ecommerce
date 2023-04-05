@@ -1,4 +1,4 @@
-import { compose, configureStore, applyMiddleware} from 'redux'
+import { compose, createStore, applyMiddleware} from 'redux'
 import logger from 'redux-logger'
 
 import { rootReducer } from './root-reducer'
@@ -19,7 +19,7 @@ const composedEnhancers = compose(applyMiddleware(...middleWares));
 
 // loggers allow us to see the state before an action is dispatch
 // , the state after an action is dispatched
-export const store = configureStore(
+export const store = createStore(
     rootReducer,
     undefined, // initial state
     composedEnhancers 
