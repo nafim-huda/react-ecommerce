@@ -108,10 +108,10 @@ export const createUserDocumentFromAuth = async (
     inside of Firestore -> below doc() will create a new firestore 
     */
     const userDocRef = doc(db, 'users', userAuth.uid);
-    console.log(userDocRef);
+    // console.log(userDocRef);
 
     const userSnapshot = await getDoc(userDocRef);
-    console.log(userSnapshot)
+    // console.log(userSnapshot)
     // .exists() tells us whether our FireStore DB actually contains the document reference and data
     // associated with the reference 
     if (!userSnapshot.exists()) {
