@@ -2,7 +2,10 @@ import { compose, createStore, applyMiddleware} from 'redux'
 import { persistStore, persistReducer} from 'redux-persist'
 import storage from 'redux-persist/lib/storage';
 import logger from 'redux-logger'
+//import thunk from 'redux-thunk'
+import createSagaMiddleware from 'redux-saga'
 
+import { rootSaga } from './root-saga';
 import { rootReducer } from './root-reducer'
 
 /* 
@@ -14,16 +17,19 @@ import { rootReducer } from './root-reducer'
 const persistConfig = {
     key: 'root',
     storage, // localStorage by default
-    blackList: ['user'], // strings that represent reducers that we DO NOT want to persist
+    whitelist: ['cart'], // strings that represent reducers that we DO want to persist
 }
+
+const sagaMiddleWare = createSagaMiddleware();
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 // middlewares let us intercept an action before it hits a reducer and perform some actions
 // only render the logger if we are in development env -> 
-const middleWares = [process.env.NODE_ENV === 'development' && logger].filter(
-    Boolean
-);
+const middleWares = [
+    process.env.NODE_ENV === 'development' && logger,
+    sagaMiddleWare
+].filter(Boolean);
 // if we are not in production, there is a window object, and dev tools extension exists -> use this compose
 const composeEnhancer
  = (process.env.NODE_ENV !== 'production' && 
@@ -43,5 +49,7 @@ export const store = createStore(
     {}, // initial state
     composedEnhancers 
 )
+
+sagaMiddleWare.run(rootSaga);
 
 export const persistor = persistStore(store);

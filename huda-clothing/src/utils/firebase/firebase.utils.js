@@ -85,7 +85,8 @@ export const getCategoriesAndDocuments = async () => {
     const collectionRef = collection(db, 'categories');
     // instantiates an object for fetching document snapshots
     const q = query(collectionRef);
-    
+    // handling error example directly below(COMMENTED OUT)
+    // await Promise.reject(new Error('new error whoops'))
     const querySnapshot = await getDocs(q);
     // retrieves the data and reduce over all of the documents 
     return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
