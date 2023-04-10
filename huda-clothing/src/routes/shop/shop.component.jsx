@@ -4,22 +4,15 @@ import { useDispatch } from 'react-redux';
 
 import CategoriesPreview from '../categories-preview/categories-preview.component';
 import Category from '../category/category.component';
-import { getCategoriesAndDocuments } from '../../utils/firebase/firebase.utils';
-import { setCategories } from '../../store/categories/category.slice';
+
+import { fetchCategoriesStart } from '../../store/categories/category.action';
 
 import '../shop/shop.styles.scss'
 
 const Shop = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        /* In general, we want to wrap any async calls inside of an async function
-         rather than defining the callback as async 
-        */
-        const getCategoriesMap = async () => {
-            const categoriesArray = await getCategoriesAndDocuments();
-            dispatch(setCategories(categoriesArray))
-        }
-        getCategoriesMap();
+        dispatch(fetchCategoriesStart());
     }, [])
 
 

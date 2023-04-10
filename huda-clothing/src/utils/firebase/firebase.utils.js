@@ -85,7 +85,8 @@ export const getCategoriesAndDocuments = async () => {
     const collectionRef = collection(db, 'categories');
     // instantiates an object for fetching document snapshots
     const q = query(collectionRef);
-    
+    // handling error example directly below(COMMENTED OUT)
+    // await Promise.reject(new Error('new error whoops'))
     const querySnapshot = await getDocs(q);
     // retrieves the data and reduce over all of the documents 
     return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
@@ -130,7 +131,7 @@ export const createUserDocumentFromAuth = async (
         }
     }
 
-    return userDocRef
+    return userSnapshot
 }
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
@@ -163,3 +164,16 @@ export const onAuthStateChangedListener = async (callback) =>
         complete: completedCallback
     }
 */
+// convert our observable listener into a Promise 
+export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = onAuthStateChanged(
+            auth, 
+            (userAuth) => {
+                unsubscribe();
+                resolve(userAuth);
+            },
+            reject
+        );
+    });
+};
