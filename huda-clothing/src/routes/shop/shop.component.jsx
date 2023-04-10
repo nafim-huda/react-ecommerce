@@ -1,11 +1,28 @@
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
 
 import CategoriesPreview from '../categories-preview/categories-preview.component';
 import Category from '../category/category.component';
+import { getCategoriesAndDocuments } from '../../utils/firebase/firebase.utils';
+import { setCategories } from '../../store/categories/category.slice';
 
 import '../shop/shop.styles.scss'
 
 const Shop = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        /* In general, we want to wrap any async calls inside of an async function
+         rather than defining the callback as async 
+        */
+        const getCategoriesMap = async () => {
+            const categoriesArray = await getCategoriesAndDocuments();
+            dispatch(setCategories(categoriesArray))
+        }
+        getCategoriesMap();
+    }, [])
+
+
     return (
         /*
             We need to first display the four categories inside of our categoriesMap ->
@@ -25,7 +42,7 @@ const Shop = () => {
             syntax follow :_paramName_
         */
 
-        
+
         <Routes>
             <Route index element={<CategoriesPreview />} />
             <Route path=":category" element={<Category />} />

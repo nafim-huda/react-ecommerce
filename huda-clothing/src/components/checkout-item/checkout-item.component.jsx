@@ -1,11 +1,18 @@
 import './checkout-item.styles.scss'
 
-import { useContext } from 'react'
+import { useDispatch } from 'react-redux'
 
-import { CartContext } from '../../contexts/cart.context'
+import { selectCartItems } from '../../store/cart/cart.selector'
+
+import { 
+    addItemToCart, 
+    removeItemFromCart, 
+    clearItemFromCart 
+} from '../../store/cart/cart.slice'
 
 const CheckoutItem = ({cartItem}) => {
-    const { addItemToCart, removeItemFromCart, clearItemFromCart } = useContext(CartContext)
+    const dispatch = useDispatch()
+    
     const{ name, imageUrl, price, quantity } = cartItem
 
     /* Why use handler methods rather than place them directly into onClick()
@@ -13,9 +20,9 @@ const CheckoutItem = ({cartItem}) => {
         2.) Performance optimization
 
     */
-    const clearItemHandler = () => clearItemFromCart(cartItem)
-    const addItemHandler = () => addItemToCart(cartItem)
-    const removeItemHandler = () => removeItemFromCart(cartItem)
+    const clearItemHandler = () => dispatch(clearItemFromCart(cartItem))
+    const addItemHandler = () => dispatch(addItemToCart(cartItem))
+    const removeItemHandler = () => dispatch(removeItemFromCart(cartItem))
 
     return (
         <div className='checkout-item-container'>

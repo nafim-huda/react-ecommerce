@@ -88,14 +88,16 @@ export const getCategoriesAndDocuments = async () => {
     
     const querySnapshot = await getDocs(q);
     // retrieves the data and reduce over all of the documents 
-    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-        // destructure values off of the document
-        const { title, items } = docSnapshot.data();
-        acc[title.toLowerCase()] = items;
-        return acc;
-    }, {})
-    // return the items stored in each documents in the 'category' collection
-    return categoryMap
+    return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
+    
+    // .reduce((acc, docSnapshot) => {
+    //     // destructure values off of the document
+    //     const { title, items } = docSnapshot.data();
+    //     acc[title.toLowerCase()] = items;
+    //     return acc;
+    // }, {})
+    // // return the items stored in each documents in the 'category' collection
+    // return categoryMap
 }
 
 export const createUserDocumentFromAuth = async (
@@ -106,10 +108,10 @@ export const createUserDocumentFromAuth = async (
     inside of Firestore -> below doc() will create a new firestore 
     */
     const userDocRef = doc(db, 'users', userAuth.uid);
-    console.log(userDocRef);
+    // console.log(userDocRef);
 
     const userSnapshot = await getDoc(userDocRef);
-    console.log(userSnapshot)
+    // console.log(userSnapshot)
     // .exists() tells us whether our FireStore DB actually contains the document reference and data
     // associated with the reference 
     if (!userSnapshot.exists()) {

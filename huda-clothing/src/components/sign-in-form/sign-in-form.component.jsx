@@ -8,7 +8,6 @@ import {
 import FormInput from "../form-input/form-input.component";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 
-// UserContext will return the value object => value = { currentUser, setUser }
 
 import './sign-in-form.styles.scss'
 
