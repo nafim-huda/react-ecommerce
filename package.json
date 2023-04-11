@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "react-redux": "^8.0.5",
-    "redux": "^4.2.1",
-    "redux-logger": "^3.0.6"
-  }
-}
