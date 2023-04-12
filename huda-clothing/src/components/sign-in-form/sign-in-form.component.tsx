@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 
 import FormInput from "../form-input/form-input.component";
@@ -9,7 +9,7 @@ import {
     emailSignInStart
 } from "../../store/user/user.action";
 
-import './sign-in-form.styles.scss'
+import {SignInContainer, ButtonsContainer} from './sign-in-form.styles'
 
 const defaultFormFields = {
     email: '',
@@ -29,14 +29,14 @@ const SignInForm = () => {
         setFormFields(defaultFormFields)
     }
 
-    const handleChange = (event) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFormFields({
             ...formFields, [name]: value // [key] matches the key to the name of the key stored in our state obj
         })
     }
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
             dispatch(emailSignInStart(email, password));
@@ -44,23 +44,13 @@ const SignInForm = () => {
             // setCurrentUser(user)
             // reset form
             resetFormFields();
-
         } catch (error) {
-            switch(error.code) {
-                case 'auth/wrong-password':
-                    alert('incorrect password for email');
-                    break;
-                case 'auth/user-not-found':
-                    alert('no user associated with this email');
-                    break;    
-                default:
-                    console.log(error)
-            }
+            console.log('user sign in failed', error)
         }
     }
 
     return (
-        <div className="sign-up-container">
+        <SignInContainer>
             <h2>Already have an account?</h2>
             <h1>Sign in with your email and password</h1>
             <form onSubmit={handleSubmit}>
@@ -80,7 +70,7 @@ const SignInForm = () => {
                     name="password"
                     value={password}
                 />
-                <div className="buttons-container">
+                <ButtonsContainer>
                     <Button type="submit">Sign In</Button>
                     <Button
                     // prevent default type='submit' behavior for button components
@@ -90,9 +80,9 @@ const SignInForm = () => {
                         >
                         Google Sign In
                     </Button>
-                </div>
+                </ButtonsContainer>
             </form>
-        </div>
+        </SignInContainer>
     );
 };
 
