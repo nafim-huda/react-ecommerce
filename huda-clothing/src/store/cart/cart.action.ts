@@ -1,20 +1,8 @@
-/* 
-
-Actions to be defined:
-    setCartItems, 
-    setIsCartOpen,
-    addItemToCart,
-    removeItemFromCart,
-    clearItemFromCart,
-
-*/
-
 import { CART_ACTION_TYPES, CartItem } from "./cart.types";
 import { CategoryItem } from "../categories/category.types";
 
 import {
     createAction,
-    Action,
     ActionWithPayload,
     withMatcher
 } from "../../utils/reducer/reducer.utils";
@@ -26,7 +14,8 @@ const addCartItem = (
     ): CartItem[] => {
     // find if cartItems contains productToAdd
     const existingCartItem = cartItems.find(
-        (cartItem) => cartItem.id === productToAdd.id
+        (cartItem) => 
+        cartItem.id === productToAdd.id
     );
     // if found, increment quantity
     if (existingCartItem) {
@@ -84,11 +73,11 @@ export const setCartItems = withMatcher((
 );
 
 export const setIsCartOpen = withMatcher((
-    isCartOpen: boolean
+    boolean: boolean
 ): SetIsCartOpen =>
     createAction(
         CART_ACTION_TYPES.SET_IS_CART_OPEN,
-        isCartOpen
+        boolean
     )
 );
 

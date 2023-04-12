@@ -1,4 +1,4 @@
-import { takeLatest, all, call, put } from 'redux-saga/effects'
+import { takeLatest, all, call, put } from 'typed-redux-saga/macro'
 
 import { getCategoriesAndDocuments } from '../../utils/firebase/firebase.utils';
  
@@ -13,13 +13,17 @@ import { CATEGORIES_ACTION_TYPES } from './category.types';
     action creator functions
 */
 
-
+// hovering over the function name will tell us the returns for each arg:
+    // 1st arg - return types for each of our yields
+    // 2nd arg - return value for our generator function
+    // 3rd arg - values passed into a next() to be passed into a yield()
 export function* fetchCategoriesAsync() {
     try {
-        const categoriesArray = yield call(getCategoriesAndDocuments);
+        //
+        const categoriesArray = yield* call(getCategoriesAndDocuments);
         yield put(fetchCategoriesSuccess(categoriesArray));
     } catch (error) {
-        yield put(fetchCategoriesFailed(error));
+        yield put(fetchCategoriesFailed(error as Error));
     }
 }
 
