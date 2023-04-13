@@ -20,7 +20,7 @@ import {
     LogoContainer,
     NavLinks,
     NavLink,
-} from './navigation.styles.jsx'
+} from './navigation.styles'
 
 /* Fragment component does not actually render any HTML 
     - useful if you don't want a wrapping parent level component(i.e. top level div) 

@@ -1,6 +1,14 @@
+import { memo } from 'react';
+
 import './cart-item.styles.scss'
 
-const CartItem = ({cartItem}) => {
+/* memo() lets us cache our functional component -> in our application 
+    we may need to add memo() to our CheckoutItem for our Checkout route -> be careful
+    about placing memo() since there is an optimization cost upon the component initially being
+    mounted 
+*/
+
+const CartItem = memo(({cartItem}) => {
     const { name, imageUrl, quantity, price} = cartItem;  
     return (
         <div className='cart-item-container'>
@@ -12,6 +20,6 @@ const CartItem = ({cartItem}) => {
                 </span>
         </div>
     )
-}
+});
 
 export default CartItem;

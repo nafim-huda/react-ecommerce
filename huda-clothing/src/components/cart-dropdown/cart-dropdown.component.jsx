@@ -1,3 +1,4 @@
+import { useCallback, useState, useMemo} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -10,11 +11,13 @@ import {CartDropdownContainer, EmptyMessage, CartItems} from './cart-dropdown.st
 
 const CartDropdown = () => {
     const cartItems  = useSelector(selectCartItems)
-    const navigate = useNavigate();
-
-    const goToCheckoutHandler = () => {
+    const navigate = useNavigate(); 
+    
+    const goToCheckoutHandler = useCallback(() => {
+        // If you anticipate anything inside of the function that this useCallback() is 
+        // reliant upon -> include it in the dependency array(i.e. some temp var )
         navigate('/checkout')
-    }
+    }, []);
 
     return (
         <CartDropdownContainer>
@@ -33,3 +36,24 @@ const CartDropdown = () => {
 }
 
 export default CartDropdown;
+
+/* 
+    useCallback() 
+        - react will always return the same function(goToCheckoutHandler) if nothing
+        in the dependency array changes 
+    
+
+ 
+    useMemo()
+         - memoizes the value returned by a function -> typically used for computationally
+         expensive functions which compute a value to be rendered
+         ex.)
+         const hundredCount = useMemo(() => {
+            console.log('start')
+            sleep(2000)
+            console.log('end')
+            return 100 + count;
+         }, [count]);
+         })
+         const val = hundredCount();
+*/
