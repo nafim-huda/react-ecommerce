@@ -68,5 +68,9 @@ overflow: hidden;
     margin-left: 7.5px;
   }
   }
+  // apply CSS rules whenever the screen size and its max-width is 800 px or below
+  @media screen and (max-width: 800px) {
+    height: 200px;
+  }
 `;
 
